@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kultursphäre — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan:#1B1BE0; --lime:#7A2FE0; --lime-bright:#B48CF7; --coral:#E31C7A;
+    --ink:#15171A; --paper:#FAF9F4; --paper-2:#F1F0E8;
+  }
+  *{box-sizing:border-box;}
+  body{font-family:'Space Grotesk',sans-serif;background:var(--paper);color:var(--ink);margin:0;padding:32px 24px 80px;}
+  h1{font-family:'Fraunces',serif;font-size:28px;margin-bottom:4px;}
+  .sub{color:#5b5b56;font-size:14px;margin-bottom:32px;}
+  .wrap{max-width:900px;margin:0 auto;}
+  .card{background:#fff;border:1px solid #e4e2d8;padding:24px;margin-bottom:24px;}
+  .card h2{font-family:'Fraunces',serif;font-size:20px;margin-bottom:16px;}
+  label{display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.03em;color:#5b5b56;margin-bottom:4px;margin-top:12px;}
+  input[type=text], input[type=email], input[type=password], textarea{
+    width:100%;padding:10px 12px;border:1px solid #d8d6cc;font-family:inherit;font-size:14px;background:var(--paper);
+  }
+  textarea{min-height:70px;resize:vertical;}
+  button{
+    background:var(--ink);color:var(--paper);border:none;padding:10px 18px;font-weight:600;font-size:13px;
+    cursor:pointer;margin-top:14px;
+  }
+  button:hover{background:var(--lime);}
+  button.danger{background:var(--coral);}
+  button.secondary{background:var(--paper-2);color:var(--ink);border:1px solid #d8d6cc;}
+  .row{display:flex;gap:16px;}
+  .row > div{flex:1;}
+  .item{border:1px solid #e4e2d8;padding:16px;margin-bottom:12px;background:var(--paper-2);}
+  .item-actions{display:flex;gap:8px;margin-top:10px;}
+  .item-actions button{margin-top:0;padding:6px 14px;font-size:12px;}
+  #login-box{max-width:360px;margin:80px auto;}
+  #app{display:none;}
+  .status{font-size:12px;color:var(--lime);margin-top:8px;}
+  .thumb{max-width:120px;max-height:80px;object-fit:cover;display:block;margin-top:8px;}
+  .logout{position:fixed;top:20px;right:24px;}
+  .logout button{background:var(--paper-2);color:var(--ink);border:1px solid #d8d6cc;}
+</style>
+</head>
+<body>
+
+<div id="login-box" class="card">
+  <h1>Admin-Login</h1>
+  <p class="sub">Zugang für Kultursphäre-Mitglieder</p>
+  <label>E-Mail</label>
+  <input type="email" id="login-email">
+  <label>Passwort</label>
+  <input type="password" id="login-password">
+  <button onclick="login()">Einloggen</button>
+  <div class="status" id="login-status"></div>
+</div>
+
+<div class="logout" id="logout-btn" style="display:none;">
+  <button onclick="logout()">Ausloggen</button>
+</div>
+
+<div id="app">
+  <div class="wrap">
+    <h1>Kultursphäre — Inhalte bearbeiten</h1>
+    <p class="sub">Änderungen sind sofort auf der Website sichtbar.</p>
+
+    <!-- EVENT-EINSTELLUNGEN -->
+    <div class="card">
+      <h2>Event-Info (Hero &amp; Footer)</h2>
+      <div class="row">
+        <div><label>Ort</label><input type="text" id="s-location"></div>
+        <div><label>Datum</label><input type="text" id="s-date"></div>
+        <div><label>Uhrzeit</label><input type="text" id="s-time"></div>
+      </div>
+      <button onclick="saveSettings()">Speichern</button>
+      <div class="status" id="s-status"></div>
+    </div>
+
+    <!-- LINE-UP -->
+    <div class="card">
+      <h2>Line-Up</h2>
+      <div id="lineup-list"></div>
+      <button class="secondary" onclick="addLineupItem()">+ Act hinzufügen</button>
+    </div>
+
+    <!-- RÜCKBLICK -->
+    <div class="card">
+      <h2>Rückblick (vergangene Events)</h2>
+      <div id="gallery-list"></div>
+      <button class="secondary" onclick="addGalleryItem()">+ Event hinzufügen</button>
+    </div>
+
+    <!-- VEREIN -->
+    <div class="card">
+      <h2>Verein — Text, Stats &amp; Foto</h2>
+      <label>Absatz 1</label>
+      <textarea id="v-p1"></textarea>
+      <label>Absatz 2</label>
+      <textarea id="v-p2"></textarea>
+      <div class="row">
+        <div><label>Ausgaben</label><input type="text" id="v-ausgaben"></div>
+        <div><label>Mitglieder</label><input type="text" id="v-mitglieder"></div>
+        <div><label>Ehrenamt-Std.</label><input type="text" id="v-ehrenamt"></div>
+      </div>
+      <label>Team-/Vereinsfoto</label>
+      <input type="file" id="v-photo-file" accept="image/*">
+      <img id="v-photo-preview" class="thumb" style="display:none;">
+      <button onclick="saveVerein()">Speichern</button>
+      <div class="status" id="v-status"></div>
+    </div>
+
+    <!-- PARTNER -->
+    <div class="card">
+      <h2>Partner</h2>
+      <div id="partner-list"></div>
+      <button class="secondary" onclick="addPartnerItem()">+ Partner hinzufügen</button>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="config.js"></script>
+<script>
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+// ---------- AUTH ----------
+async function login(){
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  const status = document.getElementById('login-status');
+  if(error){ status.textContent = 'Login fehlgeschlagen: ' + error.message; status.style.color = 'var(--coral)'; return; }
+  showApp();
+}
+async function logout(){
+  await sb.auth.signOut();
+  location.reload();
+}
+async function showApp(){
+  document.getElementById('login-box').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('logout-btn').style.display = 'block';
+  await Promise.all([loadSettings(), loadLineup(), loadGallery(), loadVerein(), loadPartners()]);
+}
+(async function init(){
+  const { data: { session } } = await sb.auth.getSession();
+  if(session) showApp();
+})();
+
+// ---------- HELPER: Bild hochladen ----------
+async function uploadImage(file, folder){
+  const ext = file.name.split('.').pop();
+  const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  const { error } = await sb.storage.from('media').upload(path, file);
+  if(error){ alert('Bild-Upload fehlgeschlagen: ' + error.message); return null; }
+  const { data } = sb.storage.from('media').getPublicUrl(path);
+  return data.publicUrl;
+}
+
+// ---------- EVENT-EINSTELLUNGEN ----------
+async function loadSettings(){
+  const { data } = await sb.from('site_settings').select('*').eq('id',1).single();
+  if(!data) return;
+  document.getElementById('s-location').value = data.event_location || '';
+  document.getElementById('s-date').value = data.event_date || '';
+  document.getElementById('s-time').value = data.event_time || '';
+}
+async function saveSettings(){
+  const payload = {
+    id: 1,
+    event_location: document.getElementById('s-location').value,
+    event_date: document.getElementById('s-date').value,
+    event_time: document.getElementById('s-time').value,
+  };
+  const { error } = await sb.from('site_settings').upsert(payload);
+  showStatus('s-status', error);
+}
+
+// ---------- LINE-UP ----------
+async function loadLineup(){
+  const { data } = await sb.from('lineup').select('*').order('sort_order');
+  const list = document.getElementById('lineup-list');
+  list.innerHTML = '';
+  (data || []).forEach(item => list.appendChild(renderLineupItem(item)));
+}
+function renderLineupItem(item){
+  const div = document.createElement('div');
+  div.className = 'item';
+  div.innerHTML = `
+    <div class="row">
+      <div><label>Reihenfolge</label><input type="text" class="f-order" value="${item.sort_order ?? 0}"></div>
+      <div><label>Uhrzeit</label><input type="text" class="f-time" value="${item.time || ''}"></div>
+    </div>
+    <label>Act</label><input type="text" class="f-act" value="${item.act || ''}">
+    <label>Genre</label><input type="text" class="f-genre" value="${item.genre || ''}">
+    <div class="item-actions">
+      <button onclick="saveLineupItem('${item.id}', this)">Speichern</button>
+      <button class="danger" onclick="deleteRow('lineup','${item.id}', this)">Löschen</button>
+    </div>`;
+  return div;
+}
+async function saveLineupItem(id, btn){
+  const div = btn.closest('.item');
+  const payload = {
+    sort_order: parseInt(div.querySelector('.f-order').value) || 0,
+    time: div.querySelector('.f-time').value,
+    act: div.querySelector('.f-act').value,
+    genre: div.querySelector('.f-genre').value,
+  };
+  await sb.from('lineup').update(payload).eq('id', id);
+}
+async function addLineupItem(){
+  const { data } = await sb.from('lineup').insert({ sort_order: 99, time:'', act:'Neuer Act', genre:'' }).select().single();
+  document.getElementById('lineup-list').appendChild(renderLineupItem(data));
+}
+
+// ---------- RÜCKBLICK ----------
+async function loadGallery(){
+  const { data } = await sb.from('gallery_events').select('*').order('sort_order');
+  const list = document.getElementById('gallery-list');
+  list.innerHTML = '';
+  (data || []).forEach(item => list.appendChild(renderGalleryItem(item)));
+}
+function renderGalleryItem(item){
+  const div = document.createElement('div');
+  div.className = 'item';
+  div.innerHTML = `
+    <div class="row">
+      <div><label>Reihenfolge</label><input type="text" class="f-order" value="${item.sort_order ?? 0}"></div>
+      <div><label>Jahr</label><input type="text" class="f-year" value="${item.year || ''}"></div>
+    </div>
+    <label>Titel</label><input type="text" class="f-title" value="${item.title || ''}">
+    <label>Bild</label><input type="file" class="f-image" accept="image/*">
+    ${item.image_url ? `<img src="${item.image_url}" class="thumb">` : ''}
+    <div class="item-actions">
+      <button onclick="saveGalleryItem('${item.id}', this)">Speichern</button>
+      <button class="danger" onclick="deleteRow('gallery_events','${item.id}', this)">Löschen</button>
+    </div>`;
+  return div;
+}
+async function saveGalleryItem(id, btn){
+  const div = btn.closest('.item');
+  const payload = {
+    sort_order: parseInt(div.querySelector('.f-order').value) || 0,
+    year: div.querySelector('.f-year').value,
+    title: div.querySelector('.f-title').value,
+  };
+  const file = div.querySelector('.f-image').files[0];
+  if(file){
+    const url = await uploadImage(file, 'gallery');
+    if(url) payload.image_url = url;
+  }
+  await sb.from('gallery_events').update(payload).eq('id', id);
+  loadGallery();
+}
+async function addGalleryItem(){
+  const { data } = await sb.from('gallery_events').insert({ sort_order: 99, year:'', title:'Neues Event' }).select().single();
+  document.getElementById('gallery-list').appendChild(renderGalleryItem(data));
+}
+
+// ---------- VEREIN ----------
+async function loadVerein(){
+  const { data } = await sb.from('verein_info').select('*').eq('id',1).single();
+  if(!data) return;
+  document.getElementById('v-p1').value = data.paragraph1 || '';
+  document.getElementById('v-p2').value = data.paragraph2 || '';
+  document.getElementById('v-ausgaben').value = data.stat_ausgaben || '';
+  document.getElementById('v-mitglieder').value = data.stat_mitglieder || '';
+  document.getElementById('v-ehrenamt').value = data.stat_ehrenamt || '';
+  if(data.team_photo_url){
+    const img = document.getElementById('v-photo-preview');
+    img.src = data.team_photo_url; img.style.display = 'block';
+  }
+}
+async function saveVerein(){
+  const payload = {
+    id: 1,
+    paragraph1: document.getElementById('v-p1').value,
+    paragraph2: document.getElementById('v-p2').value,
+    stat_ausgaben: document.getElementById('v-ausgaben').value,
+    stat_mitglieder: document.getElementById('v-mitglieder').value,
+    stat_ehrenamt: document.getElementById('v-ehrenamt').value,
+  };
+  const file = document.getElementById('v-photo-file').files[0];
+  if(file){
+    const url = await uploadImage(file, 'verein');
+    if(url) payload.team_photo_url = url;
+  }
+  const { error } = await sb.from('verein_info').upsert(payload);
+  showStatus('v-status', error);
+  loadVerein();
+}
+
+// ---------- PARTNER ----------
+async function loadPartners(){
+  const { data } = await sb.from('partners').select('*').order('sort_order');
+  const list = document.getElementById('partner-list');
+  list.innerHTML = '';
+  (data || []).forEach(item => list.appendChild(renderPartnerItem(item)));
+}
+function renderPartnerItem(item){
+  const div = document.createElement('div');
+  div.className = 'item';
+  div.innerHTML = `
+    <div class="row">
+      <div><label>Reihenfolge</label><input type="text" class="f-order" value="${item.sort_order ?? 0}"></div>
+      <div><label>Name</label><input type="text" class="f-name" value="${item.name || ''}"></div>
+    </div>
+    <label>Logo</label><input type="file" class="f-logo" accept="image/*">
+    ${item.logo_url ? `<img src="${item.logo_url}" class="thumb">` : ''}
+    <div class="item-actions">
+      <button onclick="savePartnerItem('${item.id}', this)">Speichern</button>
+      <button class="danger" onclick="deleteRow('partners','${item.id}', this)">Löschen</button>
+    </div>`;
+  return div;
+}
+async function savePartnerItem(id, btn){
+  const div = btn.closest('.item');
+  const payload = {
+    sort_order: parseInt(div.querySelector('.f-order').value) || 0,
+    name: div.querySelector('.f-name').value,
+  };
+  const file = div.querySelector('.f-logo').files[0];
+  if(file){
+    const url = await uploadImage(file, 'partners');
+    if(url) payload.logo_url = url;
+  }
+  await sb.from('partners').update(payload).eq('id', id);
+  loadPartners();
+}
+async function addPartnerItem(){
+  const { data } = await sb.from('partners').insert({ sort_order: 99, name:'Neuer Partner' }).select().single();
+  document.getElementById('partner-list').appendChild(renderPartnerItem(data));
+}
+
+// ---------- GEMEINSAM ----------
+async function deleteRow(table, id, btn){
+  if(!confirm('Wirklich löschen?')) return;
+  await sb.from(table).delete().eq('id', id);
+  btn.closest('.item').remove();
+}
+function showStatus(elId, error){
+  const el = document.getElementById(elId);
+  el.textContent = error ? 'Fehler: ' + error.message : 'Gespeichert ✓';
+  el.style.color = error ? 'var(--coral)' : 'var(--lime)';
+}
+</script>
+</body>
+</html>
