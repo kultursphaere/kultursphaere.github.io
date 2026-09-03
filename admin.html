@@ -3,466 +3,365 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kultursphäre</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,600;0,700;1,500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<title>Kultursphäre — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --cyan:#1B1BE0;
-    --lime:#7A2FE0;
-    --lime-bright:#B48CF7;
-    --coral:#E31C7A;
-    --ink:#15171A;
-    --paper:#FAF9F4;
-    --paper-2:#F1F0E8;
+    --cyan:#1B1BE0; --lime:#7A2FE0; --lime-bright:#B48CF7; --coral:#E31C7A;
+    --ink:#15171A; --paper:#FAF9F4; --paper-2:#F1F0E8;
   }
-  *{box-sizing:border-box;margin:0;padding:0;}
-  html{scroll-behavior:smooth;}
-  body{
-    font-family:'Space Grotesk', sans-serif;
-    background:var(--paper);
-    color:var(--ink);
-    overflow-x:hidden;
+  *{box-sizing:border-box;}
+  body{font-family:'Space Grotesk',sans-serif;background:var(--paper);color:var(--ink);margin:0;padding:32px 24px 80px;}
+  h1{font-family:'Fraunces',serif;font-size:28px;margin-bottom:4px;}
+  .sub{color:#5b5b56;font-size:14px;margin-bottom:32px;}
+  .wrap{max-width:900px;margin:0 auto;}
+  .card{background:#fff;border:1px solid #e4e2d8;padding:24px;margin-bottom:24px;}
+  .card h2{font-family:'Fraunces',serif;font-size:20px;margin-bottom:16px;}
+  label{display:block;font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.03em;color:#5b5b56;margin-bottom:4px;margin-top:12px;}
+  input[type=text], input[type=email], input[type=password], textarea, select{
+    width:100%;padding:10px 12px;border:1px solid #d8d6cc;font-family:inherit;font-size:14px;background:var(--paper);
   }
-  .display{
-    font-family:'Fraunces', serif;
-    font-weight:600;
-    text-transform:none;
-    letter-spacing:-0.01em;
-    line-height:0.98;
+  textarea{min-height:70px;resize:vertical;}
+  button{
+    background:var(--ink);color:var(--paper);border:none;padding:10px 18px;font-weight:600;font-size:13px;
+    cursor:pointer;margin-top:14px;
   }
-  .display i{font-style:italic;font-weight:500;color:var(--coral);}
-
-  /* NAV */
-  header{
-    position:sticky;top:0;z-index:50;
-    background:var(--paper);
-    border-bottom:1px solid #e4e2d8;
-  }
-  nav{
-    max-width:1200px;margin:0 auto;
-    display:flex;align-items:center;justify-content:space-between;
-    padding:18px 32px;
-  }
-  .logo{
-    font-family:'Fraunces', serif;
-    font-weight:600;
-    font-size:20px;
-  }
-  .navlinks{display:flex;gap:32px;list-style:none;}
-  .navlinks a{
-    color:var(--ink);text-decoration:none;font-weight:500;font-size:14px;
-    position:relative;padding-bottom:2px;
-  }
-  .navlinks a::after{
-    content:"";position:absolute;left:0;bottom:-2px;width:0;height:3px;
-    background:var(--coral);transition:width .2s ease;
-  }
-  .navlinks a:hover::after{width:100%;}
-  .navcta{
-    background:var(--ink);color:var(--paper);padding:10px 20px;
-    font-weight:700;font-size:13px;text-transform:uppercase;
-    text-decoration:none;border:1px solid #e4e2d8;
-  }
-  .navcta:hover{background:var(--paper);color:var(--ink);}
-
-  /* HERO */
-  .hero{
-    position:relative;
-    min-height:600px;
-    background:var(--paper);
-    overflow:hidden;
-    display:flex;flex-direction:column;justify-content:center;
-    padding:120px 32px 100px;
-    border-bottom:1px solid #e4e2d8;
-  }
-  .hero::before{
-    content:"";position:absolute;top:0;right:0;width:46%;height:100%;
-    background:linear-gradient(160deg, var(--cyan) 0%, var(--lime) 100%);
-    clip-path:polygon(38% 0, 100% 0, 100% 100%, 12% 100%);
-    opacity:0.9;
-  }
-  .hero-inner{max-width:1200px;margin:0 auto;width:100%;position:relative;z-index:2;}
-  .eyebrow{
-    display:inline-block;
-    font-weight:600;font-size:13px;letter-spacing:0.08em;text-transform:uppercase;
-    color:var(--coral);margin-bottom:22px;
-  }
-  .eyebrow::before{content:"● ";font-size:9px;}
-  .hero h1{
-    font-size:clamp(48px, 8vw, 104px);
-    color:var(--ink);
-    max-width:680px;
-  }
-  .hero-meta{
-    margin-top:32px;display:flex;gap:20px;flex-wrap:wrap;
-    font-weight:500;font-size:15px;
-  }
-  .hero-meta span{
-    padding:8px 0;border-top:1px solid var(--ink);
-    padding-top:10px;min-width:110px;
-  }
-  .scroll-hint{
-    position:absolute;bottom:28px;left:32px;
-    font-size:12px;font-weight:500;letter-spacing:0.04em;color:#8c8c84;
-    z-index:3;
-  }
-
-  section{padding:100px 32px;}
-  .container{max-width:1200px;margin:0 auto;}
-  .kicker{
-    display:flex;align-items:center;gap:14px;margin-bottom:48px;
-  }
-  .kicker .dot{width:14px;height:14px;background:var(--coral);border-radius:50%;flex-shrink:0;}
-  .kicker h2{font-size:clamp(34px,5vw,56px);}
-  .kicker p{color:#5b5b56;font-size:15px;max-width:420px;}
-
-  /* LINEUP */
-  .lineup-section{background:var(--ink);color:var(--paper);}
-  .lineup-section .kicker p{color:#b8b8b0;}
-
-  .stage-block{margin-bottom:56px;}
-  .stage-block:last-child{margin-bottom:0;}
-  .stage-header{
-    display:flex;align-items:center;justify-content:space-between;
-    margin-bottom:20px;
-  }
-  .stage-header h3{
-    font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:14px;
-    text-transform:uppercase;letter-spacing:0.08em;color:var(--lime-bright);
-  }
-  .stage-nav{display:flex;gap:8px;}
-  .stage-nav button{
-    width:36px;height:36px;border-radius:50%;border:1px solid #4a4c4f;
-    background:transparent;color:var(--paper);font-size:16px;cursor:pointer;
-    display:flex;align-items:center;justify-content:center;
-    transition:background .18s ease, border-color .18s ease;
-  }
-  .stage-nav button:hover{background:var(--lime);border-color:var(--lime);}
-
-  .stage-scroll{
-    display:flex;gap:16px;overflow-x:auto;scroll-behavior:smooth;
-    padding-bottom:8px;scrollbar-width:none;
-  }
-  .stage-scroll::-webkit-scrollbar{display:none;}
-
-  .slot-card{
-    flex:0 0 220px;background:#1c1e22;border:1px solid #3a3c3f;
-    scroll-snap-align:start;overflow:hidden;
-  }
-  .stage-scroll{scroll-snap-type:x proximity;}
-  .slot-card .slot-img{
-    width:100%;height:170px;object-fit:cover;background:#2a2c30;
-    display:block;
-  }
-  .slot-card .slot-img-ph{
-    width:100%;height:170px;background:#2a2c30;
-    display:flex;align-items:center;justify-content:center;
-    font-size:12px;color:#5b5b56;font-weight:500;
-  }
-  .slot-card .info{padding:18px;display:flex;flex-direction:column;gap:6px;}
-  .slot-card .time{font-size:12px;color:var(--lime-bright);font-weight:700;letter-spacing:0.05em;}
-  .slot-card .act{font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:19px;}
-  .slot-card .genre{font-size:13px;color:#9c9c94;}
-
-  /* GALLERY / PAST EVENTS */
-  .gallery-grid{
-    display:grid;grid-template-columns:1fr 1fr;gap:24px;
-  }
-  .event-card{
-    position:relative;aspect-ratio:4/5;overflow:hidden;
-    border:1px solid #e4e2d8;
-    background-size:cover;background-position:center;
-  }
-  .event-card .ph{
-    position:absolute;inset:0;
-    display:flex;align-items:center;justify-content:center;
-    font-size:13px;color:#00000055;font-weight:600;background:#dedcd0;
-  }
-  .event-card .overlay{
-    position:absolute;left:0;right:0;bottom:0;padding:24px;
-    background:linear-gradient(to top, rgba(21,23,26,0.88), transparent);
-    color:var(--paper);
-  }
-  .event-card .overlay .yr{font-size:12px;font-weight:700;color:var(--lime-bright);letter-spacing:0.05em;}
-  .event-card .overlay h3{font-family:'Fraunces',serif;font-weight:600;font-size:26px;margin-top:4px;}
-
-  /* VEREIN */
-  .verein{background:var(--paper-2);}
-  .verein-grid{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;}
-  .verein-text p{font-size:17px;line-height:1.65;color:#33332f;margin-bottom:18px;max-width:520px;}
-  .verein-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:32px;}
-  .stat{border:1px solid #e4e2d8;padding:18px 14px;text-align:center;background:var(--paper);}
-  .stat .num{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:30px;}
-  .stat .lbl{font-size:12px;text-transform:uppercase;letter-spacing:0.04em;color:#5b5b56;}
-  .verein-visual{
-    aspect-ratio:1/1;background:var(--paper);
-    border:1px solid #e4e2d8;
-    position:relative;
-    display:flex;align-items:center;justify-content:center;
-    background-size:cover;background-position:center;
-  }
-  .verein-visual span{font-family:'Space Grotesk',sans-serif;color:#8c8c84;font-size:14px;text-align:center;font-weight:500;}
-
-  /* PARTNER */
-  .partner-strip{
-    display:flex;flex-wrap:wrap;gap:2px;background:var(--ink);border:1px solid #e4e2d8;
-  }
-  .partner-logo{
-    flex:1;min-width:160px;background:var(--paper);
-    height:110px;display:flex;align-items:center;justify-content:center;
-    font-weight:700;font-size:14px;color:#8c8c84;text-transform:uppercase;letter-spacing:0.04em;
-    transition:background .18s ease, color .18s ease;
-  }
-  .partner-logo img{max-width:70%;max-height:60%;object-fit:contain;}
-  .partner-logo:hover{background:var(--lime);color:var(--ink);}
-
-  /* CTA */
-  .cta-band{
-    background:var(--ink);color:var(--paper);text-align:center;
-    padding:110px 32px;position:relative;overflow:hidden;
-  }
-  .cta-band h2{font-size:clamp(36px,6vw,64px);margin-bottom:28px;}
-  .cta-band h2 i{color:var(--lime-bright);}
-  .cta-btn{
-    display:inline-block;background:var(--paper);color:var(--ink);
-    padding:15px 34px;font-weight:600;letter-spacing:0.01em;
-    text-decoration:none;font-size:15px;border:1px solid var(--paper);
-  }
-  .cta-btn:hover{background:transparent;color:var(--paper);}
-
-  footer{background:var(--ink);color:#b8b8b0;padding:56px 32px 28px;font-size:13px;}
-  .foot-grid{max-width:1200px;margin:0 auto;display:flex;justify-content:space-between;flex-wrap:wrap;gap:32px;}
-  footer h4{color:var(--paper);font-family:'Fraunces',serif;font-weight:600;font-size:18px;margin-bottom:10px;}
-  footer a{color:#b8b8b0;text-decoration:none;display:block;margin-bottom:6px;}
-  footer a:hover{color:var(--lime-bright);}
-  footer .admin-link{margin-top:10px;font-size:11px;color:#5b5b56;}
-  footer .admin-link a{display:inline;color:#5b5b56;}
-
-  @media (max-width:820px){
-    .verein-grid, .gallery-grid{grid-template-columns:1fr;}
-    .navlinks{display:none;}
-  }
+  button:hover{background:var(--lime);}
+  button.danger{background:var(--coral);}
+  button.secondary{background:var(--paper-2);color:var(--ink);border:1px solid #d8d6cc;}
+  .row{display:flex;gap:16px;}
+  .row > div{flex:1;}
+  .item{border:1px solid #e4e2d8;padding:16px;margin-bottom:12px;background:var(--paper-2);}
+  .item-actions{display:flex;gap:8px;margin-top:10px;}
+  .item-actions button{margin-top:0;padding:6px 14px;font-size:12px;}
+  #login-box{max-width:360px;margin:80px auto;}
+  #app{display:none;}
+  .status{font-size:12px;color:var(--lime);margin-top:8px;}
+  .thumb{max-width:120px;max-height:80px;object-fit:cover;display:block;margin-top:8px;}
+  .logout{position:fixed;top:20px;right:24px;}
+  .logout button{background:var(--paper-2);color:var(--ink);border:1px solid #d8d6cc;}
 </style>
 </head>
 <body>
 
-<header>
-  <nav>
-    <div class="logo">Kultursphäre</div>
-    <ul class="navlinks">
-      <li><a href="#lineup">Line-Up</a></li>
-      <li><a href="#gallery">Rückblick</a></li>
-      <li><a href="#verein">Verein</a></li>
-      <li><a href="#partner">Partner</a></li>
-    </ul>
-    <a class="navcta" href="#">Tickets</a>
-  </nav>
-</header>
+<div id="login-box" class="card">
+  <h1>Admin-Login</h1>
+  <p class="sub">Zugang für Kultursphäre-Mitglieder</p>
+  <label>E-Mail</label>
+  <input type="email" id="login-email">
+  <label>Passwort</label>
+  <input type="password" id="login-password">
+  <button onclick="login()">Einloggen</button>
+  <div class="status" id="login-status"></div>
+</div>
 
-<section class="hero">
-  <div class="hero-inner">
-    <span class="eyebrow" id="hero-eyebrow">Gaffenberg · 26.09.2026 · ab 15 Uhr</span>
-    <h1 class="display">Hoch<i>kant</i></h1>
-    <div class="hero-meta">
-      <span>Live-Musik</span>
-      <span>DJ-Sets</span>
-      <span>Kunst &amp; Ständchen</span>
+<div class="logout" id="logout-btn" style="display:none;">
+  <button onclick="logout()">Ausloggen</button>
+</div>
+
+<div id="app">
+  <div class="wrap">
+    <h1>Kultursphäre — Inhalte bearbeiten</h1>
+    <p class="sub">Änderungen sind sofort auf der Website sichtbar.</p>
+
+    <!-- EVENT-EINSTELLUNGEN -->
+    <div class="card">
+      <h2>Event-Info (Hero &amp; Footer)</h2>
+      <div class="row">
+        <div><label>Ort</label><input type="text" id="s-location"></div>
+        <div><label>Datum</label><input type="text" id="s-date"></div>
+        <div><label>Uhrzeit</label><input type="text" id="s-time"></div>
+      </div>
+      <button onclick="saveSettings()">Speichern</button>
+      <div class="status" id="s-status"></div>
+    </div>
+
+    <!-- LINE-UP -->
+    <div class="card">
+      <h2>Line-Up</h2>
+      <p class="sub" style="margin-bottom:8px;">Jeder Act gehört entweder zur Band-Bühne oder zur DJ-Bühne. Reihenfolge bestimmt, in welcher Klick-Reihenfolge die Acts innerhalb der jeweiligen Bühne erscheinen.</p>
+      <div id="lineup-list"></div>
+      <button class="secondary" onclick="addLineupItem()">+ Act hinzufügen</button>
+    </div>
+
+    <!-- RÜCKBLICK -->
+    <div class="card">
+      <h2>Rückblick (vergangene Events)</h2>
+      <div id="gallery-list"></div>
+      <button class="secondary" onclick="addGalleryItem()">+ Event hinzufügen</button>
+    </div>
+
+    <!-- VEREIN -->
+    <div class="card">
+      <h2>Verein — Text, Stats &amp; Foto</h2>
+      <label>Absatz 1</label>
+      <textarea id="v-p1"></textarea>
+      <label>Absatz 2</label>
+      <textarea id="v-p2"></textarea>
+      <div class="row">
+        <div><label>Ausgaben</label><input type="text" id="v-ausgaben"></div>
+        <div><label>Mitglieder</label><input type="text" id="v-mitglieder"></div>
+        <div><label>Ehrenamt-Std.</label><input type="text" id="v-ehrenamt"></div>
+      </div>
+      <label>Team-/Vereinsfoto</label>
+      <input type="file" id="v-photo-file" accept="image/*">
+      <img id="v-photo-preview" class="thumb" style="display:none;">
+      <button onclick="saveVerein()">Speichern</button>
+      <div class="status" id="v-status"></div>
+    </div>
+
+    <!-- PARTNER -->
+    <div class="card">
+      <h2>Partner</h2>
+      <div id="partner-list"></div>
+      <button class="secondary" onclick="addPartnerItem()">+ Partner hinzufügen</button>
     </div>
   </div>
-  <div class="scroll-hint">↓ scrollen für mehr</div>
-</section>
-
-<section class="lineup-section" id="lineup">
-  <div class="container">
-    <div class="kicker">
-      <div class="dot"></div>
-      <div>
-        <h2 class="display">Line-Up</h2>
-        <p>Wer 2026 auf die Bühne kommt &mdash; wird laufend ergänzt.</p>
-      </div>
-    </div>
-
-    <div class="stage-block">
-      <div class="stage-header">
-        <h3>Band-Bühne</h3>
-        <div class="stage-nav">
-          <button onclick="scrollStage('band-scroll',-1)">←</button>
-          <button onclick="scrollStage('band-scroll',1)">→</button>
-        </div>
-      </div>
-      <div class="stage-scroll" id="band-scroll"></div>
-    </div>
-
-    <div class="stage-block">
-      <div class="stage-header">
-        <h3>DJ-Bühne</h3>
-        <div class="stage-nav">
-          <button onclick="scrollStage('dj-scroll',-1)">←</button>
-          <button onclick="scrollStage('dj-scroll',1)">→</button>
-        </div>
-      </div>
-      <div class="stage-scroll" id="dj-scroll"></div>
-    </div>
-  </div>
-</section>
-
-<section id="gallery">
-  <div class="container">
-    <div class="kicker">
-      <div class="dot"></div>
-      <div>
-        <h2 class="display">Rückblick</h2>
-        <p>Zwei Ausgaben, ein Anfang &mdash; die Bilder von bisherigen Veranstaltungen.</p>
-      </div>
-    </div>
-    <div class="gallery-grid" id="gallery-grid"></div>
-  </div>
-</section>
-
-<section class="verein" id="verein">
-  <div class="container verein-grid">
-    <div class="verein-text">
-      <div class="kicker" style="margin-bottom:24px;">
-        <div class="dot"></div>
-        <div><h2 class="display">Wir sind<br>Kultursphäre</h2></div>
-      </div>
-      <p id="verein-p1">Kurzer, ehrlicher Absatz darüber, wer ihr als Verein seid, was euch antreibt und warum es Kultursphäre gibt.</p>
-      <p id="verein-p2">Zweiter Absatz: was ihr konkret macht, wer mitmachen kann, wie man sich einbringt.</p>
-      <div class="verein-stats">
-        <div class="stat"><div class="num" id="stat-ausgaben">2</div><div class="lbl">Ausgaben</div></div>
-        <div class="stat"><div class="num" id="stat-mitglieder">X</div><div class="lbl">Mitglieder</div></div>
-        <div class="stat"><div class="num" id="stat-ehrenamt">Y</div><div class="lbl">Ehrenamt-Std.</div></div>
-      </div>
-    </div>
-    <div class="verein-visual" id="verein-visual"><span>Team-/<br>Vereinsfoto</span></div>
-  </div>
-</section>
-
-<section id="partner">
-  <div class="container">
-    <div class="kicker">
-      <div class="dot"></div>
-      <div>
-        <h2 class="display">Partner</h2>
-        <p>Ohne sie kein Hochkant &mdash; danke an alle Unterstützer:innen.</p>
-      </div>
-    </div>
-    <div class="partner-strip" id="partner-strip"></div>
-  </div>
-</section>
-
-<section class="cta-band">
-  <h2 class="display">Sei <i>dabei</i>.<br><span id="cta-date">26.09.2026</span></h2>
-  <a class="cta-btn" href="#">Tickets sichern</a>
-</section>
-
-<footer>
-  <div class="foot-grid">
-    <div>
-      <h4>Kultursphäre</h4>
-      <p style="max-width:260px;color:#8c8c84;" id="footer-meta">Gaffenberg · ab 15 Uhr<br>26.09.2026</p>
-    </div>
-    <div>
-      <h4>Seite</h4>
-      <a href="#lineup">Line-Up</a>
-      <a href="#gallery">Rückblick</a>
-      <a href="#verein">Verein</a>
-      <a href="#partner">Partner</a>
-    </div>
-    <div>
-      <h4>Kontakt</h4>
-      <a href="#">Instagram</a>
-      <a href="#">Mail</a>
-      <a href="#">Impressum</a>
-      <div class="admin-link"><a href="admin.html">Admin-Login</a></div>
-    </div>
-  </div>
-</footer>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="config.js"></script>
 <script>
 const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-function scrollStage(id, dir){
-  const el = document.getElementById(id);
-  el.scrollBy({ left: dir * 240, behavior: 'smooth' });
+// ---------- AUTH ----------
+async function login(){
+  const email = document.getElementById('login-email').value;
+  const password = document.getElementById('login-password').value;
+  const { error } = await sb.auth.signInWithPassword({ email, password });
+  const status = document.getElementById('login-status');
+  if(error){ status.textContent = 'Login fehlgeschlagen: ' + error.message; status.style.color = 'var(--coral)'; return; }
+  showApp();
+}
+async function logout(){
+  await sb.auth.signOut();
+  location.reload();
+}
+async function showApp(){
+  document.getElementById('login-box').style.display = 'none';
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('logout-btn').style.display = 'block';
+  await Promise.all([loadSettings(), loadLineup(), loadGallery(), loadVerein(), loadPartners()]);
+}
+(async function init(){
+  const { data: { session } } = await sb.auth.getSession();
+  if(session) showApp();
+})();
+
+// ---------- HELPER: Bild hochladen ----------
+async function uploadImage(file, folder){
+  const ext = file.name.split('.').pop();
+  const path = `${folder}/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
+  const { error } = await sb.storage.from('media').upload(path, file);
+  if(error){ alert('Bild-Upload fehlgeschlagen: ' + error.message); return null; }
+  const { data } = sb.storage.from('media').getPublicUrl(path);
+  return data.publicUrl;
 }
 
-function renderSlotCard(s){
-  return `
-    <div class="slot-card">
-      ${s.image_url ? `<img class="slot-img" src="${s.image_url}" alt="${s.act || ''}">` : `<div class="slot-img-ph">Kein Bild</div>`}
-      <div class="info">
-        <span class="time">${s.time || ''}</span>
-        <span class="act">${s.act || ''}</span>
-        <span class="genre">${s.genre || ''}</span>
-      </div>
-    </div>`;
+// ---------- EVENT-EINSTELLUNGEN ----------
+async function loadSettings(){
+  const { data } = await sb.from('site_settings').select('*').eq('id',1).single();
+  if(!data) return;
+  document.getElementById('s-location').value = data.event_location || '';
+  document.getElementById('s-date').value = data.event_date || '';
+  document.getElementById('s-time').value = data.event_time || '';
+}
+async function saveSettings(){
+  const payload = {
+    id: 1,
+    event_location: document.getElementById('s-location').value,
+    event_date: document.getElementById('s-date').value,
+    event_time: document.getElementById('s-time').value,
+  };
+  const { error } = await sb.from('site_settings').upsert(payload);
+  showStatus('s-status', error);
 }
 
+// ---------- LINE-UP ----------
 async function loadLineup(){
   const { data } = await sb.from('lineup').select('*').order('sort_order');
-  if(!data || !data.length) return;
-  const band = data.filter(s => (s.stage || 'band') === 'band');
-  const dj = data.filter(s => s.stage === 'dj');
-  document.getElementById('band-scroll').innerHTML = band.map(renderSlotCard).join('');
-  document.getElementById('dj-scroll').innerHTML = dj.map(renderSlotCard).join('');
+  const list = document.getElementById('lineup-list');
+  list.innerHTML = '';
+  (data || []).forEach(item => list.appendChild(renderLineupItem(item)));
+}
+function renderLineupItem(item){
+  const div = document.createElement('div');
+  div.className = 'item';
+  const stage = item.stage || 'band';
+  div.innerHTML = `
+    <div class="row">
+      <div><label>Reihenfolge</label><input type="text" class="f-order" value="${item.sort_order ?? 0}"></div>
+      <div><label>Uhrzeit</label><input type="text" class="f-time" value="${item.time || ''}"></div>
+      <div>
+        <label>Bühne</label>
+        <select class="f-stage">
+          <option value="band" ${stage === 'band' ? 'selected' : ''}>Band-Bühne</option>
+          <option value="dj" ${stage === 'dj' ? 'selected' : ''}>DJ-Bühne</option>
+        </select>
+      </div>
+    </div>
+    <label>Act</label><input type="text" class="f-act" value="${item.act || ''}">
+    <label>Genre</label><input type="text" class="f-genre" value="${item.genre || ''}">
+    <label>Foto</label><input type="file" class="f-image" accept="image/*">
+    ${item.image_url ? `<img src="${item.image_url}" class="thumb">` : ''}
+    <div class="item-actions">
+      <button onclick="saveLineupItem('${item.id}', this)">Speichern</button>
+      <button class="danger" onclick="deleteRow('lineup','${item.id}', this)">Löschen</button>
+    </div>`;
+  return div;
+}
+async function saveLineupItem(id, btn){
+  const div = btn.closest('.item');
+  const payload = {
+    sort_order: parseInt(div.querySelector('.f-order').value) || 0,
+    time: div.querySelector('.f-time').value,
+    stage: div.querySelector('.f-stage').value,
+    act: div.querySelector('.f-act').value,
+    genre: div.querySelector('.f-genre').value,
+  };
+  const file = div.querySelector('.f-image').files[0];
+  if(file){
+    const url = await uploadImage(file, 'lineup');
+    if(url) payload.image_url = url;
+  }
+  await sb.from('lineup').update(payload).eq('id', id);
+  loadLineup();
+}
+async function addLineupItem(){
+  const { data } = await sb.from('lineup').insert({ sort_order: 99, time:'', stage:'band', act:'Neuer Act', genre:'' }).select().single();
+  document.getElementById('lineup-list').appendChild(renderLineupItem(data));
 }
 
+// ---------- RÜCKBLICK ----------
 async function loadGallery(){
   const { data } = await sb.from('gallery_events').select('*').order('sort_order');
-  const grid = document.getElementById('gallery-grid');
-  if(!data || !data.length) return;
-  grid.innerHTML = data.map(e => `
-    <div class="event-card" ${e.image_url ? `style="background-image:url('${e.image_url}')"` : ''}>
-      ${e.image_url ? '' : '<div class="ph"></div>'}
-      <div class="overlay"><div class="yr">${e.year || ''}</div><h3>${e.title || ''}</h3></div>
-    </div>`).join('');
+  const list = document.getElementById('gallery-list');
+  list.innerHTML = '';
+  (data || []).forEach(item => list.appendChild(renderGalleryItem(item)));
+}
+function renderGalleryItem(item){
+  const div = document.createElement('div');
+  div.className = 'item';
+  div.innerHTML = `
+    <div class="row">
+      <div><label>Reihenfolge</label><input type="text" class="f-order" value="${item.sort_order ?? 0}"></div>
+      <div><label>Jahr</label><input type="text" class="f-year" value="${item.year || ''}"></div>
+    </div>
+    <label>Titel</label><input type="text" class="f-title" value="${item.title || ''}">
+    <label>Bild</label><input type="file" class="f-image" accept="image/*">
+    ${item.image_url ? `<img src="${item.image_url}" class="thumb">` : ''}
+    <div class="item-actions">
+      <button onclick="saveGalleryItem('${item.id}', this)">Speichern</button>
+      <button class="danger" onclick="deleteRow('gallery_events','${item.id}', this)">Löschen</button>
+    </div>`;
+  return div;
+}
+async function saveGalleryItem(id, btn){
+  const div = btn.closest('.item');
+  const payload = {
+    sort_order: parseInt(div.querySelector('.f-order').value) || 0,
+    year: div.querySelector('.f-year').value,
+    title: div.querySelector('.f-title').value,
+  };
+  const file = div.querySelector('.f-image').files[0];
+  if(file){
+    const url = await uploadImage(file, 'gallery');
+    if(url) payload.image_url = url;
+  }
+  await sb.from('gallery_events').update(payload).eq('id', id);
+  loadGallery();
+}
+async function addGalleryItem(){
+  const { data } = await sb.from('gallery_events').insert({ sort_order: 99, year:'', title:'Neues Event' }).select().single();
+  document.getElementById('gallery-list').appendChild(renderGalleryItem(data));
 }
 
+// ---------- VEREIN ----------
 async function loadVerein(){
-  const { data } = await sb.from('verein_info').select('*').eq('id', 1).single();
+  const { data } = await sb.from('verein_info').select('*').eq('id',1).single();
   if(!data) return;
-  if(data.paragraph1) document.getElementById('verein-p1').textContent = data.paragraph1;
-  if(data.paragraph2) document.getElementById('verein-p2').textContent = data.paragraph2;
-  document.getElementById('stat-ausgaben').textContent = data.stat_ausgaben || '—';
-  document.getElementById('stat-mitglieder').textContent = data.stat_mitglieder || '—';
-  document.getElementById('stat-ehrenamt').textContent = data.stat_ehrenamt || '—';
+  document.getElementById('v-p1').value = data.paragraph1 || '';
+  document.getElementById('v-p2').value = data.paragraph2 || '';
+  document.getElementById('v-ausgaben').value = data.stat_ausgaben || '';
+  document.getElementById('v-mitglieder').value = data.stat_mitglieder || '';
+  document.getElementById('v-ehrenamt').value = data.stat_ehrenamt || '';
   if(data.team_photo_url){
-    const visual = document.getElementById('verein-visual');
-    visual.style.backgroundImage = `url('${data.team_photo_url}')`;
-    visual.innerHTML = '';
+    const img = document.getElementById('v-photo-preview');
+    img.src = data.team_photo_url; img.style.display = 'block';
   }
 }
+async function saveVerein(){
+  const payload = {
+    id: 1,
+    paragraph1: document.getElementById('v-p1').value,
+    paragraph2: document.getElementById('v-p2').value,
+    stat_ausgaben: document.getElementById('v-ausgaben').value,
+    stat_mitglieder: document.getElementById('v-mitglieder').value,
+    stat_ehrenamt: document.getElementById('v-ehrenamt').value,
+  };
+  const file = document.getElementById('v-photo-file').files[0];
+  if(file){
+    const url = await uploadImage(file, 'verein');
+    if(url) payload.team_photo_url = url;
+  }
+  const { error } = await sb.from('verein_info').upsert(payload);
+  showStatus('v-status', error);
+  loadVerein();
+}
 
+// ---------- PARTNER ----------
 async function loadPartners(){
   const { data } = await sb.from('partners').select('*').order('sort_order');
-  const strip = document.getElementById('partner-strip');
-  if(!data || !data.length) return;
-  strip.innerHTML = data.map(p => `
-    <div class="partner-logo">
-      ${p.logo_url ? `<img src="${p.logo_url}" alt="${p.name || ''}">` : (p.name || '')}
-    </div>`).join('');
+  const list = document.getElementById('partner-list');
+  list.innerHTML = '';
+  (data || []).forEach(item => list.appendChild(renderPartnerItem(item)));
+}
+function renderPartnerItem(item){
+  const div = document.createElement('div');
+  div.className = 'item';
+  div.innerHTML = `
+    <div class="row">
+      <div><label>Reihenfolge</label><input type="text" class="f-order" value="${item.sort_order ?? 0}"></div>
+      <div><label>Name</label><input type="text" class="f-name" value="${item.name || ''}"></div>
+    </div>
+    <label>Logo</label><input type="file" class="f-logo" accept="image/*">
+    ${item.logo_url ? `<img src="${item.logo_url}" class="thumb">` : ''}
+    <div class="item-actions">
+      <button onclick="savePartnerItem('${item.id}', this)">Speichern</button>
+      <button class="danger" onclick="deleteRow('partners','${item.id}', this)">Löschen</button>
+    </div>`;
+  return div;
+}
+async function savePartnerItem(id, btn){
+  const div = btn.closest('.item');
+  const payload = {
+    sort_order: parseInt(div.querySelector('.f-order').value) || 0,
+    name: div.querySelector('.f-name').value,
+  };
+  const file = div.querySelector('.f-logo').files[0];
+  if(file){
+    const url = await uploadImage(file, 'partners');
+    if(url) payload.logo_url = url;
+  }
+  await sb.from('partners').update(payload).eq('id', id);
+  loadPartners();
+}
+async function addPartnerItem(){
+  const { data } = await sb.from('partners').insert({ sort_order: 99, name:'Neuer Partner' }).select().single();
+  document.getElementById('partner-list').appendChild(renderPartnerItem(data));
 }
 
-async function loadSettings(){
-  const { data } = await sb.from('site_settings').select('*').eq('id', 1).single();
-  if(!data) return;
-  const text = `${data.event_location} · ${data.event_date} · ${data.event_time}`;
-  document.getElementById('hero-eyebrow').textContent = text;
-  document.getElementById('cta-date').textContent = data.event_date;
-  document.getElementById('footer-meta').innerHTML = `${data.event_location} · ${data.event_time}<br>${data.event_date}`;
+// ---------- GEMEINSAM ----------
+async function deleteRow(table, id, btn){
+  if(!confirm('Wirklich löschen?')) return;
+  await sb.from(table).delete().eq('id', id);
+  btn.closest('.item').remove();
 }
-
-loadLineup();
-loadGallery();
-loadVerein();
-loadPartners();
-loadSettings();
+function showStatus(elId, error){
+  const el = document.getElementById(elId);
+  el.textContent = error ? 'Fehler: ' + error.message : 'Gespeichert ✓';
+  el.style.color = error ? 'var(--coral)' : 'var(--lime)';
+}
 </script>
-
 </body>
 </html>
